@@ -10,7 +10,7 @@
 import Foundation
 
 func start(){
-    GerenciaDisciplinas.sharedInstance.start(filePath: "/Users/mateusnobre/Teste/DISCIPLINAS.csv")
+    GerenciaDisciplinas.sharedInstance.start(todasFilePath: "/Users/mateusnobre/Teste/DISCIPLINAS.csv", feitasFilePath: "/Users/mateusnobre/Teste/FEITAS.csv")
 }
 
 
@@ -20,14 +20,12 @@ func menu() {
     *-----------------------------------------*
     01. Ver grade horaria criada
     02. Editar disciplinas da grade atual
-    03. Ver disciplinas possíveis (Em progresso)
+    03. Ver Todas as Disciplinas
     04. Ver disciplinas feitas
-    05. Editar disciplinas feitas
-    06. Ver todas as Disciplinas
-    07. Gerar semestres ótimos (Em progresso)
-    08. Ver disciplinas Possiveis
+    05. Gerar semestre ótimo
+    06. Ver disciplinas Possiveis
     10. Sair
-    *-----------------------------------------*\n
+    *-----------------------------------------*
     
     """
 
@@ -39,7 +37,7 @@ func menu() {
 
         switch option {
         case 1:
-            GerenciaDisciplinas.sharedInstance.verGrade()
+            GerenciaDisciplinas.sharedInstance.printGrade()
         case 2:
             print("""
             \n*-------------------------------*
@@ -56,7 +54,6 @@ func menu() {
                 let keys:[String] = str.split(separator: " ").map {  String($0) }
                 print(GerenciaDisciplinas.sharedInstance.adicionaDisciplinasGradeSalva(disciplinasID: keys))
             case 2:
-                print("Opcao 02")
                 print("Digite o ID das disciplinas a serem removidas (separe por espaco)")
                 let str:String = readLine()!
                 let keys:[String] = str.split(separator: " ").map {  String($0) }
@@ -66,44 +63,19 @@ func menu() {
             default:
                 print("Opcao desconhecida")
             }
+            
         case 3:
-            print("Opcao 03")
+            GerenciaDisciplinas.sharedInstance.getTodasDisciplinas()
+            
         case 4:
             GerenciaDisciplinas.sharedInstance.getDisciplinasFeitas()
-       // case 5:
-//            print("Opcao 05")
-//            print("""
-//            \n*-------------------------------*
-//            01. Adicionar Disciplinas
-//            02. Remover Disciplinas
-//            03. Voltar
-//            *-------------------------------*\n
-//            """)
-//            let option2 = Int(readLine()!)!
-//            switch option2 {
-//            case 1:
-//                print("Digite o ID das disciplinas a serem inseridas (separe por espaco)")
-//                let str:String = readLine()!
-//                let keys:[String] = str.split(separator: " ").map {  String($0) }
-//                print(GerenciaDisciplinas.sharedInstance.adicionaDisciplinaFeita(disciplinasID: keys))
-//            case 2:
-//                print("Digite o ID das disciplinas a serem removidas (separe por espaco)")
-//                let str:String = readLine()!
-//                let keys:[String] = str.split(separator: " ").map {  String($0) }
-//                print(GerenciaDisciplinas.sharedInstance.removeDisciplinaFeita(disciplinasID:keys))
-//            case 3:
-//                print("Voltando...")
-//            default:
-//                print("Opcao desconhecida")
-//            }
+        
+        case 5:
+            print("Semestre Ótimo::\n")
+            print(GerenciaDisciplinas.sharedInstance.disciplinasPossiveis.map {$0.name})
+            GerenciaDisciplinas.sharedInstance.printArrayDisciplinas(GerenciaDisciplinas.sharedInstance.melhorSemestre(discsPossiveis: GerenciaDisciplinas.sharedInstance.disciplinasPossiveis))
+
         case 6:
-            GerenciaDisciplinas.sharedInstance.getTodasDisciplinas()
-        
-        case 7:
-            print("Opcao 07")
-        
-        case 8:
-            print("Opcao 08")
             GerenciaDisciplinas.sharedInstance.printDisciplinasPossiveis()
         case 10:
             break menuWhile

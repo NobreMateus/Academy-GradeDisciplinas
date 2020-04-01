@@ -42,18 +42,38 @@ class GerenciaDisciplinas {
     private(set) var disciplinasPossiveis:[Discipline] = []
     static let instance = GerenciaDisciplinas()
     
+    
     class var sharedInstance: GerenciaDisciplinas {
         return GerenciaDisciplinas.instance
     }
     
+    
     private init(){}
     
-    func start(filePath:String){
-        self.csvToDisciplinas(filePath:filePath)
+    
+    func start(todasFilePath:String, feitasFilePath:String){
+        self.csvToDisciplinas(filePath:todasFilePath)
+        self.csvToDisciplinasFeitas(filePath: feitasFilePath)
         self.disciplinasPossiveis = self.preencheDisciplinasPossiveis()
     }
     
-    func csvToDisciplinas(filePath: String){
+    
+    private func csvToDisciplinasFeitas(filePath: String){
+        let fileURL: URL = URL(fileURLWithPath: filePath)
+        do{
+            let stringFromFile: String = try String(contentsOf: fileURL)
+            let feitasId:[String] = stringFromFile.split(separator: "\r\n").map{ String($0) }
+            for disc in feitasId {
+                disciplinasFeitas[disc] = todasDisciplinas[disc]!
+            }
+        }catch {
+            print(error.localizedDescription)
+            return
+        }
+    }
+    
+    
+    private func csvToDisciplinas(filePath: String){
         let fileURL: URL = URL(fileURLWithPath: filePath)
         do {
             let stringFromFile: String = try String(contentsOf: fileURL)
@@ -69,8 +89,7 @@ class GerenciaDisciplinas {
                 }
                 //Create Discipline from File
                 let infoLine = line.split(separator: ",")
-                 
-           
+          
                 let preReqString:[String] = infoLine.count > 5 ? infoLine[5].split(separator: ";").map{String($0)} : []
                 
                 var horarios:[ClassHour] = []
@@ -112,6 +131,7 @@ class GerenciaDisciplinas {
         
     }
     
+    
     private func preencheDisciplinasPossiveis()->[Discipline]{
         
         var disciplinasPossiveis:[Discipline] = []
@@ -146,13 +166,22 @@ class GerenciaDisciplinas {
         }
     }
     
+    
     public func printDisciplinasPossiveis() {
         
         print("Disciplinas Possiveis:\n")
         for i in preencheDisciplinasPossiveis() {
-            print("Disciplina: \(i.name)\nID: \(i.id) | Créditos: \(i.creditos)\n")
+            print("Disciplina: \(i.name)\nID: \(i.id) | Créditos: \(i.creditos) | Semestre: \(i.semestre) \n")
         }
     }
+    
+    
+    func printArrayDisciplinas(_ discs:[Discipline]){
+        for i in discs {
+            print("Disciplina: \(i.name)\nID: \(i.id) | Créditos: \(i.creditos) | Semestre: \(i.semestre) \n")
+        }
+    }
+    
     
     public func getDisciplinasFeitas() {
         
@@ -161,33 +190,13 @@ class GerenciaDisciplinas {
             //print("Disciplina: \(i.value.name)")
             print("Disciplina: \(i.value.name)\nID: \(i.value.id) | Créditos: \(i.value.creditos)\n")
         }
-        
-//        return disciplinasFeitas
     }
     
     public func getDisciplinasGradeSalva() -> [Discipline] {
       return disciplinasGradeSalva
     }
-    /* --------------------------------------------------------------------------------------------------------------------------------------------------- */
-    
-//    func adicionaDisciplinaFeita(disciplinasID: [String]) -> [Bool] {
-//        var deuCerto:[Bool] = []
-//        for disciplinaID in disciplinasID {
-//            if disciplinasPossiveis[disciplinaID] != nil {
-//                disciplinasFeitas[disciplinaID] = disciplinasPossiveis[disciplinaID]!
-//                deuCerto.append(true)
-//            } else{
-//                deuCerto.append(false)
-//            }
-//
-//        }
-//        return deuCerto
-//    }
-//
-//    func adicionaDisciplinaFeita(disciplinasID: String...) -> [Bool]{
-//        return adicionaDisciplinaFeita(disciplinasID: disciplinasID)
-//    }
 
+    
     func adicionaDisciplinasGradeSalva(disciplinasID: [String]) -> [Bool] {
         var deuCerto:[Bool] = []
         for disciplinaID in disciplinasID {
@@ -235,24 +244,6 @@ class GerenciaDisciplinas {
         return deuCerto
     }
     
-//    func removeDisciplinaFeita(disciplinasID: [String]) -> [Bool] {
-//        var deuCerto:[Bool] = []
-//        for disciplinaID in disciplinasID {
-//            if disciplinasFeitas[disciplinaID] != nil {
-//                disciplinasFeitas[disciplinaID] = nil
-//                deuCerto.append(true)
-//            }else {
-//                deuCerto.append(false)
-//            }
-//        }
-//        return deuCerto
-//    }
-//
-//    func removeDisciplinaFeita(disciplinasID: String...) -> [Bool]{
-//        return removeDisciplinaFeita(disciplinasID: disciplinasID)
-//    }
-
-    /* --------------------------------------------------------------------------------------------------------------------------------------------------- */
     
     func chocaHorarios(_ disciplina1: Discipline, _ disciplina2: Discipline) -> Bool {
         
@@ -261,39 +252,119 @@ class GerenciaDisciplinas {
         for aula1 in disciplina1.horarios {
             for aula2 in disciplina2.horarios {
                 
-                if(!(aula2.endHour < aula1.startHour) && aula1.weekDay == aula2.weekDay) {
+                if ( aula2.startHour >= aula1.startHour && aula2.startHour < aula1.endHour ) && (aula1.weekDay == aula2.weekDay) {
                     chocouHorario = true
-                } else {
-                    chocouHorario = false
                 }
             }
         }
         return chocouHorario
     }
-    //print(chocaHorarios(disciplina1: disciplinasPossiveis["ENG02"]!, disciplina2: disciplinasPossiveis["ENG03"]!))
     
-    /* ----------------------------------------------------------------------------------------- ---------------------------------------------------------- */
-
-    func verGrade() {
-        // print(disciplinas)
+    
+    func melhorSemestre(discsPossiveis:[Discipline]) -> [Discipline] {
+        
+        var arrayResposta:[Discipline]?
+        
+        guard discsPossiveis.count != 0 else {
+            return []
+        }
+        
+        for disciplina:Discipline in discsPossiveis{
+            
+            var possiveisComDiscAtual: [Discipline] = []
+            
+            discsPossiveis.forEach{
+                if(!self.chocaHorarios($0, disciplina)){
+                    possiveisComDiscAtual.append($0)
+                }
+            }
+           
+            var tempArray:[Discipline] = melhorSemestre(discsPossiveis: possiveisComDiscAtual)
+            
+            tempArray.append(disciplina)
+            
+            guard arrayResposta != nil else{
+                arrayResposta = tempArray
+                continue
+            }
+            
+            if self.avaliaEMelhor(atual: arrayResposta!, novo: tempArray){
+                arrayResposta  = tempArray
+                
+            }
+        }
+        return arrayResposta!
+    }
+    
+    
+    private func avaliaEMelhor(atual:[Discipline], novo: [Discipline])->Bool{
+        
+        var creditosAtual = 0, creditosNovo = 0, somaSemestreAtual = 0, somaSemestreNovo=0
+        
+        atual.forEach{
+            creditosAtual+=$0.creditos
+            somaSemestreAtual+=$0.semestre
+        }
+        
+        novo.forEach{
+            creditosNovo+=$0.creditos
+            somaSemestreNovo+=$0.semestre
+        }
+        
+        if creditosNovo>creditosAtual {
+            return true
+        }else if creditosNovo == creditosAtual && somaSemestreNovo < somaSemestreAtual {
+            return true
+        }
+        
+        return false
+    }
+    
+    
+    func printGrade() {
         let disciplinas = disciplinasGradeSalva
         let semana = [
-        "Segunda" : disciplinas.filter {$0.horarios.filter{$0.weekDay == WeekDay.monday}.count > 0},
-        "Terça" : disciplinas.filter {$0.horarios.filter{$0.weekDay == WeekDay.tuesday}.count > 0} ,
-        "Quarta" : disciplinas.filter {$0.horarios.filter{$0.weekDay == WeekDay.wednesday}.count > 0} ,
-        "Quinta" : disciplinas.filter {$0.horarios.filter{$0.weekDay == WeekDay.thursday}.count > 0} ,
-        "Sexta" : disciplinas.filter {$0.horarios.filter{$0.weekDay == WeekDay.friday}.count > 0} ,
-        "Sábado" : disciplinas.filter {$0.horarios.filter{$0.weekDay == WeekDay.saturday}.count > 0}
+        WeekDay.monday : disciplinas.filter {$0.horarios.filter{$0.weekDay == WeekDay.monday}.count > 0},
+        WeekDay.tuesday : disciplinas.filter {$0.horarios.filter{$0.weekDay == WeekDay.tuesday}.count > 0} ,
+        WeekDay.wednesday : disciplinas.filter {$0.horarios.filter{$0.weekDay == WeekDay.wednesday}.count > 0} ,
+        WeekDay.thursday : disciplinas.filter {$0.horarios.filter{$0.weekDay == WeekDay.thursday}.count > 0} ,
+        WeekDay.friday : disciplinas.filter {$0.horarios.filter{$0.weekDay == WeekDay.friday}.count > 0} ,
+        WeekDay.saturday : disciplinas.filter {$0.horarios.filter{$0.weekDay == WeekDay.saturday}.count > 0}
         ]
+        
+        let orderWeek = [WeekDay.monday, WeekDay.tuesday, WeekDay.wednesday, WeekDay.thursday, WeekDay.friday, WeekDay.saturday]
 
         print("\nGRADE DE HORARIOS SALVA: \n")
-        for dayName in ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"] {
-            print("""
-            \(dayName):
-            \(semana[dayName]!.map{$0.name})
+        for key in orderWeek {
             
-            """
-            )
+            var discsTuplas = semana[key]!.map { ($0.name, $0.horarios.filter{$0.weekDay == key}[0]) }
+            
+            discsTuplas.sort{ $0.1.startHour < $1.1.startHour }
+            
+            print("\(weekDaytoString(key)): ")
+            discsTuplas.forEach{
+                print("\($0.1.startHour) - \($0.1.endHour): \($0.0)    ")
+            }
+            print()
+        }
+    }
+    
+    
+    private func weekDaytoString(_ weekDay:WeekDay)->String{
+        switch weekDay {
+        case .monday:
+            return "Segunda"
+        case .tuesday:
+            return "Terça"
+        case .wednesday:
+            return "Quarta"
+        case .thursday:
+            return "Quinta"
+        case .friday:
+            return "Sexta"
+        case .saturday:
+            return "Sábado"
+            
         }
     }
 }
