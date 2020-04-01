@@ -9,11 +9,12 @@
 
 import Foundation
 
+//Funcao chamada para inicar o aplicativo, iniciar e preencher a intancia Singleton com os dados dos csv
 func start(){
     GerenciaDisciplinas.sharedInstance.start(todasFilePath: "/Users/mateusnobre/Teste/DISCIPLINAS.csv", feitasFilePath: "/Users/mateusnobre/Teste/FEITAS.csv")
 }
 
-
+//Funcao para gerar o menu e fazer a navegacao dentro da aplicacao 
 func menu() {
 
     let menuStr = """

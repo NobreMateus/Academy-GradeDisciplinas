@@ -18,6 +18,7 @@ enum WeekDay {
     case saturday
 }
 
+//Structs necessarias
 struct ClassHour {
     var startHour: Float
     var endHour: Float
@@ -34,6 +35,7 @@ struct Discipline {
 }
 
 
+//Classe responsavel por gerenciar a as disciplinas e grade de disciplinas
 class GerenciaDisciplinas {
 
     var todasDisciplinas:[String: Discipline] = [:]
@@ -42,7 +44,8 @@ class GerenciaDisciplinas {
     private(set) var disciplinasPossiveis:[Discipline] = []
     static let instance = GerenciaDisciplinas()
     
-    
+    //Pedaco do codigo necessario para tornar a classe Singleton
+    //--------------------------------------------
     class var sharedInstance: GerenciaDisciplinas {
         return GerenciaDisciplinas.instance
     }
@@ -50,7 +53,10 @@ class GerenciaDisciplinas {
     
     private init(){}
     
+    //---------------------------------------------
     
+    
+    //Metodo utilizado para chamar os metodos para tratar CSV e para preeencher algumas propriedades da classe
     func start(todasFilePath:String, feitasFilePath:String){
         self.csvToDisciplinas(filePath:todasFilePath)
         self.csvToDisciplinasFeitas(filePath: feitasFilePath)
@@ -58,6 +64,7 @@ class GerenciaDisciplinas {
     }
     
     
+    //Metodo para acessar e tratar os dados do CSV com todas as disciplinas
     private func csvToDisciplinasFeitas(filePath: String){
         let fileURL: URL = URL(fileURLWithPath: filePath)
         do{
@@ -73,6 +80,7 @@ class GerenciaDisciplinas {
     }
     
     
+    //Metodo para acessar e tratar dados de um csv com os ID`s das disciplinas ja feitas
     private func csvToDisciplinas(filePath: String){
         let fileURL: URL = URL(fileURLWithPath: filePath)
         do {
@@ -132,6 +140,7 @@ class GerenciaDisciplinas {
     }
     
     
+    //Metodo que retorna array de disciplinas possiveis de acordo com as disciplinas ja feitas, choques de horario e pre-requisitos
     private func preencheDisciplinasPossiveis()->[Discipline]{
         
         var disciplinasPossiveis:[Discipline] = []
@@ -158,6 +167,7 @@ class GerenciaDisciplinas {
     }
     
     
+    //Metodo para printar todas as disciplinas
     public func getTodasDisciplinas() {
         
         print("Todas as Disciplinas:\n")
@@ -167,6 +177,7 @@ class GerenciaDisciplinas {
     }
     
     
+    //Metodo para printar as disciplinas possiveis de serem feitas, de acordo com horarios e pre-requisitos
     public func printDisciplinasPossiveis() {
         
         print("Disciplinas Possiveis:\n")
@@ -176,6 +187,7 @@ class GerenciaDisciplinas {
     }
     
     
+    //Metodo para printar um array de Disciplinas
     func printArrayDisciplinas(_ discs:[Discipline]){
         for i in discs {
             print("Disciplina: \(i.name)\nID: \(i.id) | Créditos: \(i.creditos) | Semestre: \(i.semestre) \n")
@@ -183,6 +195,7 @@ class GerenciaDisciplinas {
     }
     
     
+    //Metodo para printar disciplinas que foram feitas
     public func getDisciplinasFeitas() {
         
         print("Disciplinas feitas:\n")
@@ -192,11 +205,14 @@ class GerenciaDisciplinas {
         }
     }
     
+    
+    //Retorna array com disciplinas salvas na Grade
     public func getDisciplinasGradeSalva() -> [Discipline] {
       return disciplinasGradeSalva
     }
 
     
+    //Metodo que recebe um array de ID`s de disciplinas e, se possivel, as adiciona a Grade de Horario
     func adicionaDisciplinasGradeSalva(disciplinasID: [String]) -> [Bool] {
         var deuCerto:[Bool] = []
         for disciplinaID in disciplinasID {
@@ -224,6 +240,8 @@ class GerenciaDisciplinas {
         return deuCerto
     }
 
+    
+    //Metodo que recebe um array de ID`s de disciplians e, se possivel, as remove da Grade de Horarios
     func removeDisciplinaGradeSalva(disciplinasID: [String]) -> [Bool] {
         print(disciplinasID)
         var deuCerto:[Bool] = []
@@ -245,6 +263,7 @@ class GerenciaDisciplinas {
     }
     
     
+    //Metodo para verificar se duas disciplinas tem dois horarios que se chocam
     func chocaHorarios(_ disciplina1: Discipline, _ disciplina2: Discipline) -> Bool {
         
         var chocouHorario: Bool = false
@@ -261,6 +280,7 @@ class GerenciaDisciplinas {
     }
     
     
+    //Metodo recursivo para gerar o melhor semestre possivel
     func melhorSemestre(discsPossiveis:[Discipline]) -> [Discipline] {
         
         var arrayResposta:[Discipline]?
@@ -297,6 +317,7 @@ class GerenciaDisciplinas {
     }
     
     
+    //Metodo para avaliar se um subconjunto solucao é melhor que outro
     private func avaliaEMelhor(atual:[Discipline], novo: [Discipline])->Bool{
         
         var creditosAtual = 0, creditosNovo = 0, somaSemestreAtual = 0, somaSemestreNovo=0
@@ -321,6 +342,7 @@ class GerenciaDisciplinas {
     }
     
     
+    //Metodo para printar a grade horario na tela
     func printGrade() {
         let disciplinas = disciplinasGradeSalva
         let semana = [
@@ -350,6 +372,7 @@ class GerenciaDisciplinas {
     }
     
     
+    //Metodo para retornar uma string de acordo com o WeekDay passado
     private func weekDaytoString(_ weekDay:WeekDay)->String{
         switch weekDay {
         case .monday:
