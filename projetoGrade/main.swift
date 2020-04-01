@@ -71,9 +71,8 @@ func menu() {
             GerenciaDisciplinas.sharedInstance.getDisciplinasFeitas()
         
         case 5:
-            print("Semestre Ótimo::\n")
-            print(GerenciaDisciplinas.sharedInstance.disciplinasPossiveis.map {$0.name})
-            GerenciaDisciplinas.sharedInstance.printArrayDisciplinas(GerenciaDisciplinas.sharedInstance.melhorSemestre(discsPossiveis: GerenciaDisciplinas.sharedInstance.disciplinasPossiveis))
+            print("Semestre Ótimo:\n")
+             GerenciaDisciplinas.sharedInstance.printArrayDisciplinas(GerenciaDisciplinas.sharedInstance.melhorSemestre(discsPossiveis: GerenciaDisciplinas.sharedInstance.disciplinasPossiveis))
 
         case 6:
             GerenciaDisciplinas.sharedInstance.printDisciplinasPossiveis()

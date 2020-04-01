@@ -1,0 +1,43 @@
+ID,Nome,Horarios,Creditos,Semestre,Pre-Requisitos
+ENG01,Logica Matematica,tue:13.5-15.5;thu:13.5-15.5,4,1,
+ENG02,Introducao a Programacao,mon:16-18;wed:16-18;fri:16-18,6,1,
+ENG03,Eletronica Digital,mon:13.5-15.5;wed:13.5-15.5;fri:13.5-15.5,6,1,
+ENG04,Calculo 01,tue:16-18;thu:16-18,4,1,
+ENG05,Matematica Discreta,mon:16-18;wed:16-18,4,2,
+ENG06,Programacao Orientada a Objetos,tue:16-18;thu:16-18,4,2,ENG02
+ENG07,Eletronica Analogica,mon:13.5-15.5;wed:10-12;fri:13.5-15.5,6,2,
+ENG08,Calculo 02,tue:13.5-15.5;thu:13.5-15.5,4,2,ENG04
+ENG09,Fisica Eletricidade,wed:13.5-15.5;fri:16-18,4,2,
+ENG10,IAA,fri:13.5-15.5;mon:13.5-15.5,4,3,ENG02;ENG05
+ENG11,Estrutura de Dados,mon:16-18;wed:16-18,4,3,ENG02
+ENG12,Circuitos Eletronicos,tue:13.5-15.5;wed:13.5-15.5,4,3,ENG07
+ENG13,Arquitetura de Computadores,thu:13.5-15.5;fri:16-18,4,3,ENG03
+ENG14,Fisica-Magnetismo,tue:16-18;thu:16-18,4,3,ENG09
+ENG15,Aspectos Teoricos da Computacao,tue:13.5-15.5;thu:13.5-15.5,4,4,ENG05
+ENG16,Pesquisa e Ordenacao,wed:16-18;fri:16-18,4,4,ENG11
+ENG17,Microcontroladores e Microprocessadores,mon:16-18;tue:16-18;thu:16-18,6,4,ENG02;ENG03
+ENG18,Geometria Analitica e Algebra Linear,mon:13.5-15.5;wed:13.5-15.5;fri:13.5-15.5,6,4,
+ENG19,Metologia Cientifica e Tecnologica,wed:16-18,2,5,
+ENG20,Calculo Numerico,mon:16-18;fri:16-18,4,5,ENG02;ENG04
+ENG21,Banco de Dados,mon:13.5-15.5;tue:13.5-15.5,4,5,
+ENG22,Sistemas Lineares,tue:16-18;thu:16-18,4,5,ENG08
+ENG23,Sistemas Operacionais,wed:13.5-15.5;thu:13.5-15.5,4,5,ENG13
+ENG24,Engenharia de Software,tue:13.5-15.5;wed:13.5-15.5,4,6,ENG06
+ENG25,Probabilidade e Estatistica,tue:16-18;thu:16-18,4,6,
+ENG26,Redes de Computadores,thu:13.5-15.5;fri:13.5-15.5,4,6,
+ENG27,Sistemas Embarcados,mon:16-18;wed:16-18;fri:16-18,6,6,ENG07;ENG13;ENG17
+ENG28,Interacao Humano Computador,mon:16-18;wed:16-18,4,7,ENG24
+ENG29,Computacao Grafica,wed:13.5-15.5;fri:13.5-15.5,4,7,ENG02;ENG18
+ENG30,Grafos,tue:13.5-15.5;thu:13.5-15.5,4,7,ENG11
+ENG31,Producao Textual,thu:16-18,2,7,
+ENG32,Introducao a Automacao Industrial e Controle,tue:16-18;fri:16-18,4,7,ENG22
+ENG33,Projeto de Sistemas de Informacao,mon:13.5-15.5;wed:13.5-15.5,4,8,ENG24
+ENG34,Inteligencia Computacional,tue:13.5-15.5;thu:13.5-15.5,4,8,ENG02;ENG25
+ENG35,Sistemas Distribuidos,mon:16-18,2,8,ENG06ENG26
+ENG36,Sistemas de Tempo Real,wed:16-18,2,8,ENG23
+ENG37,Aplicacoes de Controle,tue:16-18;thu:16-18,4,8,ENG12;ENG17;ENG32
+ENG38,Trabalho de Graduacao Interdisciplinar,sat:07.5-09.5,2,9,ENG19;ENG24;ENG27
+ENG39,Empreendedorismo e Gestao,tue:13.5-15.5,2,9,
+ENG40,Programacao Paralela e Distribuida,mon:13.5-15.5;tue:13.5-15.5;thu:13.5-15.5,6,9,ENG35
+ENG42,Etica e Filosofia,fri:16-18,2,10,
+ENG43,Projeto Social,wed:13.5-15.5,2,10,
